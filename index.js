@@ -1,5 +1,18 @@
 'use strict';
 
+//lets require/import the mongodb native drivers.
+var mongodb = require('mongodb');
+var mongoose = require('mongoose');
+
+//We need to work with "MongoClient" interface in order to connect to a mongodb server.
+var note = require('models/note');
+// Connection URL. This is where your mongodb server is running.
+
+//(Focus on This Variable)
+var url = 'mongodb://heroku_x165sjcl:70j5vju073lhcmr57k31su0i6t@ds153521.mlab.com:53521/heroku_x165sjcl';      
+//(Focus on This Variable)
+mongoose.connect(url); 
+
 const express = require('express');
 const bodyParser = require('body-parser');
 
@@ -13,9 +26,15 @@ restService.use(bodyParser.json());
 
 restService.post('/echo', function(req, res) {
     var speech = req.body.result && req.body.result.parameters && req.body.result.parameters.echoText ? req.body.result.parameters.echoText : "Seems like some problem. Speak again."
+    
+    // Use connect method to connect to the Server
+    var msg = "Your note has been saved successfully!"
+    var temp_note = new note({subject: req.body.result.parameters.Subjects, content: req.body.result.parameters.text})
+    temp_note.save(function (err) {if (err) msg = 'Error on save!'});
+    
     return res.json({
-        speech: speech,
-        displayText: speech,
+        speech: msg,
+        displayText: msg,
         source: 'webhook-echo-sample'
     });
 });
