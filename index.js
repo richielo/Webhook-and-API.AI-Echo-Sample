@@ -35,6 +35,8 @@ restService.post('/echo', function(req, res) {
     
     var subject = req.body.result.parameters.Subjects;
     var content = req.body.result.parameters.text;
+    console.log("subject: " + subject);
+    console.log("content: " + content);
     
     var msg = "Dafaq are you saying!";
     if(subject){
