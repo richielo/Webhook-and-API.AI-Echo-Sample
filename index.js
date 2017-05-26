@@ -9,7 +9,7 @@ var notesSchema = mongoose.Schema({
     content : String
 });
 
-note = mongoose.model('note', notesSchema);
+var note = mongoose.model('note', notesSchema);
 
 //(Focus on This Variable)
 var url = 'mongodb://heroku_x165sjcl:70j5vju073lhcmr57k31su0i6t@ds153521.mlab.com:53521/heroku_x165sjcl'; 
