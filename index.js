@@ -64,6 +64,7 @@ restService.post('/echo', function(req, res) {
             });
         }
     }
+    console.log("msg: " + msg);
     return res.json({
         speech: msg,
         displayText: msg,
