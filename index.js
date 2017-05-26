@@ -38,7 +38,7 @@ restService.post('/echo', function(req, res) {
     
     var msg = "Your note has been saved successfully!";
     if(subject){
-        if(subject.toLowerCase() == 'get'){
+        if(subject == 'get'){
             note.findOne({'subject': content}, 'subject content', function(err, note){
                 if(err){
                         console.log(err);
