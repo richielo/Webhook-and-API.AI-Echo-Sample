@@ -33,15 +33,16 @@ restService.use(bodyParser.json());
 restService.post('/echo', function(req, res) {
     // Use connect method to connect to the Server
     
-    var subject = req.body.result.parameters.Subject;
+    var action = req.body.results.action; 
+    var subject = req.body.result.parameters.subject;
     var content = req.body.result.parameters.text;
     console.log("subject: " + subject);
     console.log("content: " + content);
     
     var msg = "Dafaq are you saying!";
-    if(subject){
-        if(subject == 'get'){
-            note.findOne({'subject': content}, 'subject content', function(err, note){
+    process.nextTick(function() {
+        if(action == 'get'){
+            note.findOne({'subject': subject}, 'subject content', function(err, note){
                 if(err){
                         console.log(err);
                 }
@@ -53,7 +54,7 @@ restService.post('/echo', function(req, res) {
                 }
             });
         }
-        else{
+        else if(action == 'input'){
             var temp_note = new note({subject: subject, content: content});
             temp_note.save(function (err) {
                 if (err) {
@@ -65,7 +66,8 @@ restService.post('/echo', function(req, res) {
                 }
             });
         }
-    }
+    });
+
     console.log("msg: " + msg);
     return res.json({
         speech: msg,
