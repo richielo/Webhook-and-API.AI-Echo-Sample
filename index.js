@@ -48,7 +48,7 @@ restService.post('/echo', function(req, res) {
             else{
                 msg = note.content;
             }
-        }
+        });
     }
     else{
         var temp_note = new note({subject: subject, content: content});
