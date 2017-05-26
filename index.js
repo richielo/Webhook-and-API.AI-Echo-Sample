@@ -32,16 +32,33 @@ restService.use(bodyParser.json());
 
 restService.post('/echo', function(req, res) {
     // Use connect method to connect to the Server
-    var msg = "Your note has been saved successfully!";
-    console.log("Hi");
-    var temp_note = new note({subject: req.body.result.parameters.Subjects, content: req.body.result.parameters.text});
-    temp_note.save(function (err) {
-        if (err) {
-            msg = 'Error on save!';
-            console.log('Error on save!');
-        }
-    });
     
+    var subject = req.body.result.parameters.Subjects;
+    var content = req.body.result.parameters.text;
+    
+    var msg = "Your note has been saved successfully!";
+    if(subject.toLowerCase() == 'get'){
+        note.findOne({'subject': subject}, 'local.username local.verified', function(err, note){
+            if(err){
+                    console.log(err);
+            }
+            if(!user){
+                msg = "Fuck, I can't find anything about" + subject;
+            }
+            else{
+                msg = note.content;
+            }
+        }
+    }
+    else{
+        var temp_note = new note({subject: subject, content: content});
+        temp_note.save(function (err) {
+            if (err) {
+                msg = 'Error on save!';
+                console.log('Error on save!');
+            }
+        });
+    }
     return res.json({
         speech: msg,
         displayText: msg,
