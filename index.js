@@ -29,8 +29,14 @@ restService.post('/echo', function(req, res) {
     
     // Use connect method to connect to the Server
     var msg = "Your note has been saved successfully!";
+    console.log("Hi");
     var temp_note = new note({subject: req.body.result.parameters.Subjects, content: req.body.result.parameters.text});
-    temp_note.save(function (err) {if (err) msg = 'Error on save!'});
+    temp_note.save(function (err) {
+        if (err) {
+            msg = 'Error on save!';
+            console.log('Error on save!');
+        }
+    });
     
     return res.json({
         speech: msg,
