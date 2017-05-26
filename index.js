@@ -46,7 +46,7 @@ restService.post('/echo', function(req, res) {
                 if(err){
                         console.log(err);
                 }
-                if(!user){
+                if(!note){
                     msg = "Fuck, I can't find anything about" + subject;
                 }
                 else{
