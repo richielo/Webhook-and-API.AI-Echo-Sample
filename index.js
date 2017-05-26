@@ -33,7 +33,7 @@ restService.use(bodyParser.json());
 restService.post('/echo', function(req, res) {
     // Use connect method to connect to the Server
     
-    var subject = req.body.result.parameters.Subjects;
+    var subject = req.body.result.parameters.Subject;
     var content = req.body.result.parameters.text;
     console.log("subject: " + subject);
     console.log("content: " + content);
