@@ -52,6 +52,13 @@ restService.post('/echo', function(req, res) {
                 else{
                     msg = note.content;
                 }
+                
+                console.log("msg: " + msg);
+                return res.json({
+                    speech: msg,
+                    displayText: msg,
+                    source: 'webhook-echo-sample'
+                });
             });
         }
         else if(action == 'input'){
@@ -64,16 +71,17 @@ restService.post('/echo', function(req, res) {
                 else{
                     msg = "Your note has been saved successfully!"
                 }
+                
+                console.log("msg: " + msg);
+                return res.json({
+                    speech: msg,
+                    displayText: msg,
+                    source: 'webhook-echo-sample'
+                });
             });
         }
     });
 
-    console.log("msg: " + msg);
-    return res.json({
-        speech: msg,
-        displayText: msg,
-        source: 'webhook-echo-sample'
-    });
 });
 
 restService.listen((process.env.PORT || 8000), function() {
