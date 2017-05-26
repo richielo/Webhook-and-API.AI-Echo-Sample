@@ -37,27 +37,29 @@ restService.post('/echo', function(req, res) {
     var content = req.body.result.parameters.text;
     
     var msg = "Your note has been saved successfully!";
-    if(subject == 'get'){
-        note.findOne({'subject': content}, 'subject content', function(err, note){
-            if(err){
-                    console.log(err);
-            }
-            if(!user){
-                msg = "Fuck, I can't find anything about" + subject;
-            }
-            else{
-                msg = note.content;
-            }
-        });
-    }
-    else{
-        var temp_note = new note({subject: subject, content: content});
-        temp_note.save(function (err) {
-            if (err) {
-                msg = 'Error on save!';
-                console.log('Error on save!');
-            }
-        });
+    if(subject){
+        if(subject.toLowerCase() == 'get'){
+            note.findOne({'subject': content}, 'subject content', function(err, note){
+                if(err){
+                        console.log(err);
+                }
+                if(!user){
+                    msg = "Fuck, I can't find anything about" + subject;
+                }
+                else{
+                    msg = note.content;
+                }
+            });
+        }
+        else{
+            var temp_note = new note({subject: subject, content: content});
+            temp_note.save(function (err) {
+                if (err) {
+                    msg = 'Error on save!';
+                    console.log('Error on save!');
+                }
+            });
+        }
     }
     return res.json({
         speech: msg,
