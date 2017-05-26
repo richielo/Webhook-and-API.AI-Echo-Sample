@@ -33,11 +33,11 @@ restService.use(bodyParser.json());
 restService.post('/echo', function(req, res) {
     // Use connect method to connect to the Server
     
-    var subject = req.body.result.parameters.Subjects;
+    var subject = req.body.result.parameters.Subjects.toLowerCase();
     var content = req.body.result.parameters.text;
     
     var msg = "Your note has been saved successfully!";
-    if(subject.toLowerCase() == 'get'){
+    if(subject == 'get'){
         note.findOne({'subject': content}, 'subject content', function(err, note){
             if(err){
                     console.log(err);
