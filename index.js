@@ -5,13 +5,20 @@ var mongodb = require('mongodb');
 var mongoose = require('mongoose');
 
 //We need to work with "MongoClient" interface in order to connect to a mongodb server.
-var note = require('models/note');
-// Connection URL. This is where your mongodb server is running.
+var notesSchema = mongoose.Schema({
+    subject : String,
+    content : String
+});
+
+note = mongoose.model('note', notesSchema);
 
 //(Focus on This Variable)
-var url = 'mongodb://heroku_x165sjcl:70j5vju073lhcmr57k31su0i6t@ds153521.mlab.com:53521/heroku_x165sjcl';      
+var url = 'mongodb://heroku_x165sjcl:70j5vju073lhcmr57k31su0i6t@ds153521.mlab.com:53521/heroku_x165sjcl'; 
+mongoose.connect(url, function (error) {
+    if (error) console.log(error);
+    else console.log('mongo connected');
+});
 //(Focus on This Variable)
-mongoose.connect(url); 
 
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -26,7 +33,6 @@ restService.use(bodyParser.json());
 
 restService.post('/echo', function(req, res) {
     var speech = req.body.result && req.body.result.parameters && req.body.result.parameters.echoText ? req.body.result.parameters.echoText : "Seems like some problem. Speak again."
-    
     // Use connect method to connect to the Server
     var msg = "Your note has been saved successfully!";
     console.log("Hi");
