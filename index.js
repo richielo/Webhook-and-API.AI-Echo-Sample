@@ -36,7 +36,7 @@ restService.post('/echo', function(req, res) {
     var subject = req.body.result.parameters.Subjects;
     var content = req.body.result.parameters.text;
     
-    var msg = "Your note has been saved successfully!";
+    var msg = "Dafaq are you saying!";
     if(subject){
         if(subject == 'get'){
             note.findOne({'subject': content}, 'subject content', function(err, note){
@@ -57,6 +57,9 @@ restService.post('/echo', function(req, res) {
                 if (err) {
                     msg = 'Error on save!';
                     console.log('Error on save!');
+                }
+                else{
+                    msg = "Your note has been saved successfully!"
                 }
             });
         }
