@@ -90,7 +90,8 @@ restService.post('/echo', function(req, res) {
                 }
                 else{
                     var i;
-                    msg = "Your majesty, I find " + subject + " from notes ";
+                    msg = "Your majesty, I found " + subject + " in notes ";
+                    console.len(notes.length);
                     for(i = 0; i < notes.length; i++){
                         if(notes.length == 1){
                             msg + notes[i].subject;
