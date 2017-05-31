@@ -62,14 +62,33 @@ restService.post('/echo', function(req, res) {
             });
         }
         else if(action == 'input'){
-            var temp_note = new note({subject: subject, content: content});
-            temp_note.save(function (err) {
-                if (err) {
-                    msg = 'Error on save!';
-                    console.log('Error on save!');
+            note.findOne({'subject': subject}, 'subject content', function(err, note){
+                if(err){
+                        console.log(err);
+                        msg = "Something fucking wrong happened";
+                }
+                if(!note){
+                    var temp_note = new note({subject: subject, content: content});
+                    temp_note.save(function (err) {
+                        if (err) {
+                            msg = 'Error on save!';
+                            console.log('Error on save!');
+                        }
+                        else{
+                            msg = "Your note has been saved successfully!"
+                        }
+                    });
                 }
                 else{
-                    msg = "Your note has been saved successfully!"
+                    
+                    note.findOneAndUpdate({'subject':subject}, {$set:{'content':note.content + '\n' + content}}, function(err, note){
+                       if(err){
+                           msg = "Something fucking wrong happened";
+                       } 
+                       else{
+                           msg = "Your note has been updated successfully";
+                       }
+                    });
                 }
                 
                 console.log("msg: " + msg);
@@ -111,11 +130,36 @@ restService.post('/echo', function(req, res) {
                 });
             });
         }
-        else if(action == 'update'){
-            //bla
-        }
         else if(action == 'delete'){
-            
+            subject = req.body.result.parameters.subject
+            note.remove({'subject' : subject}, function(err){
+               if(err){
+                   msg = "Something fucking wrong happend.";
+               } 
+               else{
+                   msg = "This note is gone.";
+               }
+               return res.json({
+                    speech: msg,
+                    displayText: msg,
+                    source: 'webhook-echo-sample'
+               });
+            });
+        }
+        else if(action == 'delete.all'){
+            note.remove({}, function(err){
+               if(err){
+                   msg = "Something fucking wrong happend.";
+               } 
+               else{
+                   msg = "You have nothing left";
+               }
+               return res.json({
+                    speech: msg,
+                    displayText: msg,
+                    source: 'webhook-echo-sample'
+               });
+            });
         }
     });
 
