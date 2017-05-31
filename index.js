@@ -82,7 +82,7 @@ restService.post('/echo', function(req, res) {
         }
         else if(action == 'search'){
             //bla
-            note.find({$or:['subject':{$regex : ".*"+subject+".*"}, 'content':{$regex : ".*"+subject+".*"}]}, 'subject content', function(err, notes){
+            note.find({$or:['subject': new RegExp(subject, 'i'), 'content': new RegExp(subject, 'i')]}, 'subject content', function(err, notes){
                 var i;
                 var search_msg = "Your majesty, I find something from notes";
                 for(i = 0; i < notes.length; i++){
