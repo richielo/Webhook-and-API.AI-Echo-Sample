@@ -85,13 +85,13 @@ restService.post('/echo', function(req, res) {
                     });
                 }
             ], function(err){
-                return res.json({
+            });
+            console.log(msg);
+            return res.json({
                 speech: msg,
                 displayText: msg,
                 source: 'webhook-echo-sample'
             });
-            });
-            
         }
         else if(action == 'search'){
             //bla
