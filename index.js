@@ -82,20 +82,32 @@ restService.post('/echo', function(req, res) {
         }
         else if(action == 'search'){
             //bla
+            console.log('search');
+            subject = req.body.result.parameters.any;
             note.find({$or:[{'subject': new RegExp(subject, 'i')}, {'content': new RegExp(subject, 'i')}]}, 'subject content', function(err, notes){
-                var i;
-                var search_msg = "Your majesty, I find something from notes";
-                for(i = 0; i < notes.length; i++){
-                    if(notes.length == 1){
-                        search_msg + notes[i].subject;
-                    }
-                    else if(i == notes.length - 2){
-                        search_msg + notes[i].subject + "and ";
-                    }
-                    else{
-                        search_msg + notes[i] + ' ';
+                if(!notes){
+                    msg = "I can't find anything about" + subject;
+                }
+                else{
+                    var i;
+                    msg = "Your majesty, I find " + subject + " from notes ";
+                    for(i = 0; i < notes.length; i++){
+                        if(notes.length == 1){
+                            msg + notes[i].subject;
+                        }
+                        else if(i == notes.length - 2){
+                            msg + notes[i].subject + "and ";
+                        }
+                        else{
+                            msg + notes[i] + ' ';
+                        }
                     }
                 }
+                return res.json({
+                    speech: msg,
+                    displayText: msg,
+                    source: 'webhook-echo-sample'
+                });
             });
         }
         else if(action == 'update'){
