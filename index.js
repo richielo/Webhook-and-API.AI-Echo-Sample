@@ -47,7 +47,7 @@ restService.post('/echo', function(req, res) {
                         console.log(err);
                 }
                 if(!note){
-                    msg = "Fuck, I can't find anything about" + subject;
+                    msg = "Fuck, I can't find anything about " + subject;
                 }
                 else{
                     msg = note.content;
@@ -79,6 +79,30 @@ restService.post('/echo', function(req, res) {
                     source: 'webhook-echo-sample'
                 });
             });
+        }
+        else if(action == 'search'){
+            //bla
+            note.find({$or:['subject':{$regex : ".*"+subject+".*"}, 'content':{$regex : ".*"+subject+".*"}]}, 'subject content', function(err, notes){
+                var i;
+                var search_msg = "Your majesty, I find something from notes";
+                for(i = 0; i < notes.length; i++){
+                    if(notes.length == 1){
+                        search_msg + notes[i].subject;
+                    }
+                    else if(i == notes.length - 2){
+                        search_msg + notes[i].subject + "and ";
+                    }
+                    else{
+                        search_msg + notes[i] + ' ';
+                    }
+                }
+            });
+        }
+        else if(action == 'update'){
+            //bla
+        }
+        else if(action == 'delete'){
+            
         }
     });
 
