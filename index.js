@@ -71,8 +71,8 @@ restService.post('/echo', function(req, res) {
                         if(note){
                             old_content = note.content;
                         }
+                        callback()
                     });        
-                    console.log('oldcontent: ' + old_content);
                 },
                 function(callback){
                      note.findOneAndUpdate({'subject':subject}, {$set:{'content': old_content + '\n' + content}}, { upsert: true, new: true, setDefaultsOnInsert: true }, function(err, note){
@@ -82,16 +82,19 @@ restService.post('/echo', function(req, res) {
                     else{
                         msg = "Your note has been saved successfully";
                     }
+                    callback();
                     });
                 }
             ], function(err){
-            });
-            console.log(msg);
-            return res.json({
+                console.log('oldcontent: ' + old_content);
+                console.log('msg: ' + msg);
+                return res.json({
                 speech: msg,
                 displayText: msg,
                 source: 'webhook-echo-sample'
+                });
             });
+            console.log(msg);
         }
         else if(action == 'search'){
             //bla
