@@ -97,10 +97,10 @@ restService.post('/echo', function(req, res) {
                             msg += notes[i].subject;
                         }
                         else if(i == notes.length - 2){
-                            msg += notes[i].subject + "and ";
+                            msg += notes[i].subject + " and ";
                         }
                         else{
-                            msg += notes[i] + ' ';
+                            msg += notes[i].subject + ' ';
                         }
                     }
                 }
