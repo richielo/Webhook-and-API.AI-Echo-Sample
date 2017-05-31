@@ -2,6 +2,7 @@
 
 //lets require/import the mongodb native drivers.
 var mongoose = require('mongoose');
+var async = require('async');
 
 //We need to work with "MongoClient" interface in order to connect to a mongodb server.
 var notesSchema = mongoose.Schema({
@@ -62,37 +63,34 @@ restService.post('/echo', function(req, res) {
             });
         }
         else if(action == 'input'){
-            process.nextTick(function() {
         
-                var old_content = "";
-                note.findOne({'subject': subject}, 'subject content', function(err, note){
-                    if(note){
-                        old_content = note.content;
+            var old_content = "";
+            async.series([
+                function(callback){
+                    note.findOne({'subject': subject}, 'subject content', function(err, note){
+                        if(note){
+                            old_content = note.content;
+                        }
+                    });        
+                    console.log('oldcontent: ' + old_content);
+                },
+                function(callback){
+                     note.findOneAndUpdate({'subject':subject}, {$set:{'content': old_content + '\n' + content}}, { upsert: true, new: true, setDefaultsOnInsert: true }, function(err, note){
+                    if(err){
+                        msg = "Something fucking wrong happened";
+                    } 
+                    else{
+                        msg = "Your note has been saved successfully";
                     }
-                });        
-                console.log('oldcontent: ' + old_content);
-                note.findOneAndUpdate({'subject':subject}, {$set:{'content': old_content + '\n' + content}}, { upsert: true, new: true, setDefaultsOnInsert: true }, function(err, note){
-                if(err){
-                    msg = "Something fucking wrong happened";
-                } 
-                else{
-                    msg = "Your note has been saved successfully";
+                    });
                 }
-                });
-
-
-                console.log("msg: " + msg);
+            ], function(err){
                 return res.json({
-                    speech: msg,
-                    displayText: msg,
-                    source: 'webhook-echo-sample'
-                });
+                speech: msg,
+                displayText: msg,
+                source: 'webhook-echo-sample'
             });
-            return res.json({
-                    speech: msg,
-                    displayText: msg,
-                    source: 'webhook-echo-sample'
-                });
+            });
             
         }
         else if(action == 'search'){
