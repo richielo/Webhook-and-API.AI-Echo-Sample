@@ -85,10 +85,7 @@ restService.post('/echo', function(req, res) {
             console.log('search');
             subject = req.body.result.parameters.any;
             note.find({$or:[{'subject': new RegExp(subject, 'i')}, {'content': new RegExp(subject, 'i')}]}, 'subject content', function(err, notes){
-                if(!notes){
-                    msg = "I can't find anything about" + subject;
-                }
-                else{
+                if(notes.length > 0){
                     var i;
                     msg = "Your majesty, I found " + subject + " in notes ";
                     console.log(notes.length);
@@ -103,6 +100,9 @@ restService.post('/echo', function(req, res) {
                             msg += notes[i].subject + ' ';
                         }
                     }
+                }
+                else{
+                    msg = "I can't find anything about" + subject;
                 }
                 return res.json({
                     speech: msg,
