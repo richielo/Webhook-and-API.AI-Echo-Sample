@@ -68,24 +68,24 @@ restService.post('/echo', function(req, res) {
                 if(note){
                     old_content = note.content;
                 }
+                console.log('oldcontent: ' + old_content);
+                note.findOneAndUpdate({'subject':subject}, {$set:{'content': old_content + '\n' + content}}, { upsert: true, new: true, setDefaultsOnInsert: true }, function(err, note){
+                if(err){
+                    msg = "Something fucking wrong happened";
+                } 
+                else{
+                    msg = "Your note has been saved successfully";
+                }
+                });
+
+
+                console.log("msg: " + msg);
+                return res.json({
+                    speech: msg,
+                    displayText: msg,
+                    source: 'webhook-echo-sample'
+                });
             });        
-            console.log('oldcontent: ' + old_content);
-            note.findOneAndUpdate({'subject':subject}, {$set:{'content': old_content + '\n' + content}}, { upsert: true, new: true, setDefaultsOnInsert: true }, function(err, note){
-            if(err){
-                msg = "Something fucking wrong happened";
-            } 
-            else{
-                msg = "Your note has been saved successfully";
-            }
-            });
-                
-                
-            console.log("msg: " + msg);
-            return res.json({
-                speech: msg,
-                displayText: msg,
-                source: 'webhook-echo-sample'
-            });
             
         }
         else if(action == 'search'){
