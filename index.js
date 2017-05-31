@@ -62,42 +62,31 @@ restService.post('/echo', function(req, res) {
             });
         }
         else if(action == 'input'){
+        
+            var old_content = "";
             note.findOne({'subject': subject}, 'subject content', function(err, note){
-                if(err){
-                        console.log(err);
-                        msg = "Something fucking wrong happened";
+                if(note){
+                    old_content = note.content;
                 }
-                if(!note){
-                    var temp_note = new note({subject: subject, content: content});
-                    temp_note.save(function (err) {
-                        if (err) {
-                            msg = 'Error on save!';
-                            console.log('Error on save!');
-                        }
-                        else{
-                            msg = "Your note has been saved successfully!"
-                        }
-                    });
-                }
-                else{
-                    
-                    note.findOneAndUpdate({'subject':subject}, {$set:{'content':note.content + '\n' + content}}, function(err, note){
-                       if(err){
-                           msg = "Something fucking wrong happened";
-                       } 
-                       else{
-                           msg = "Your note has been updated successfully";
-                       }
-                    });
-                }
-                
-                console.log("msg: " + msg);
-                return res.json({
-                    speech: msg,
-                    displayText: msg,
-                    source: 'webhook-echo-sample'
-                });
+            });        
+            console.log('oldcontent: ' + old_content);
+            note.findOneAndUpdate({'subject':subject}, {$set:{'content': old_content + '\n' + content}}, { upsert: true, new: true, setDefaultsOnInsert: true }, function(err, note){
+            if(err){
+                msg = "Something fucking wrong happened";
+            } 
+            else{
+                msg = "Your note has been saved successfully";
+            }
             });
+                
+                
+            console.log("msg: " + msg);
+            return res.json({
+                speech: msg,
+                displayText: msg,
+                source: 'webhook-echo-sample'
+            });
+            
         }
         else if(action == 'search'){
             //bla
