@@ -31,7 +31,7 @@ restService.use(bodyParser.urlencoded({
 
 restService.use(bodyParser.json());
 
-restService.post('/all', function(req, res){
+restService.get('/all', function(req, res){
      process.nextTick(function() {
          note.find({}, 'subject content', function(err, note){
              if(err){
