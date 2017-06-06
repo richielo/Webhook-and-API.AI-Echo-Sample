@@ -31,6 +31,18 @@ restService.use(bodyParser.urlencoded({
 
 restService.use(bodyParser.json());
 
+restService.post('/all', function(req, res){
+     process.nextTick(function() {
+         note.find({}, 'subject content', function(err, note){
+             if(err){
+                 console.log(err);
+             }
+             return res.json(note);
+         })
+     });
+});
+
+
 restService.post('/echo', function(req, res) {
     // Use connect method to connect to the Server
     
